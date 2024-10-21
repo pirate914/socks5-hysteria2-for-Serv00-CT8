@@ -34,7 +34,7 @@ else
   # 分别添加每个服务的 crontab 任务
 
   # Dashboard 的重启任务
-  if [ -f "${MY_WORKDIR}/start.sh" ]; then
+  if [ -f "${WORKDIR}/start.sh" ]; then
     echo "添加 Dashboard 的 crontab 重启任务"
     add_cron_job "@reboot pkill -kill -u $USER && ${CRON_DASHBOARD}"
     add_cron_job "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}"
