@@ -40,7 +40,7 @@ else
     add_cron_job "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}"
   fi
 
-  # Nezha 的重启任务
+  # Nezhaa 的重启任务
   if [ -f "${WORKDIR}/start.sh" ]; then
     echo "添加 Nezha 的 crontab 重启任务"
     add_cron_job "@reboot pkill -kill -u $USER && ${CRON_NEZHA}"
