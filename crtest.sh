@@ -4,6 +4,7 @@
 USER=$(whoami)
 USER_LOWER="${USER,,}"
 USER_HOME="/home/${USER_LOWER}"
+MY_WORKDIR="${USER_HOME}/.nezha-dashboard"
 WORKDIR="${USER_HOME}/.nezha-agent"
 FILE_PATH="${USER_HOME}/.s5"
 HYSTERIA_WORKDIR="${USER_HOME}/.hysteria"
@@ -11,6 +12,7 @@ HYSTERIA_CONFIG="${HYSTERIA_WORKDIR}/config.yaml"  # Hysteria 配置文件路径
 
 # 定义 crontab 任务
 CRON_S5="nohup ${FILE_PATH}/s5 -c ${FILE_PATH}/config.json >/dev/null 2>&1 &"
+CRON_DASHBOARD="nohup ${MY_WORKDIR}/start.sh >/dev/null 2>&1 &"
 CRON_NEZHA="nohup ${WORKDIR}/start.sh >/dev/null 2>&1 &"
 CRON_HYSTERIA="nohup ${HYSTERIA_WORKDIR}/web server -c ${HYSTERIA_CONFIG} >/dev/null 2>&1 &"
 PM2_PATH="${USER_HOME}/.npm-global/lib/node_modules/pm2/bin/pm2"
@@ -30,6 +32,13 @@ if command -v pm2 > /dev/null 2>&1 && [[ $(which pm2) == "${USER_HOME}/.npm-glob
   add_cron_job "$CRON_JOB"
 else
   # 分别添加每个服务的 crontab 任务
+
+  # Dashboard 的重启任务
+  if [ -f "${MY_WORKDIR}/start.sh" ]; then
+    echo "添加 Dashboard 的 crontab 重启任务"
+    add_cron_job "@reboot pkill -kill -u $USER && ${DASHBOARD}"
+    add_cron_job "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${DASHBOARD}"
+  fi
 
   # Nezha 的重启任务
   if [ -f "${WORKDIR}/start.sh" ]; then
