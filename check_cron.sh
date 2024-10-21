@@ -39,7 +39,7 @@ else
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_S5} && ${CRON_HYSTERIA}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_S5} && ${CRON_HYSTERIA}") | crontab -
     (crontab -l | grep -F "* * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
     (crontab -l | grep -F "* * pgrep -x \"hysteria-server\" > /dev/null || ${CRON_HYSTERIA}") || (crontab -l; echo "*/12 * * * * pgrep -x \"hysteria-server\" > /dev/null || ${CRON_HYSTERIA}") | crontab -
-  elif [ -e "${WORKDIR}/start.sh" ]; then
+  elif [ -e "${MY_WORKDIR}/start.sh" ]; then
     echo "添加 dashboard 的 crontab 重启任务"
     (crontab -l | grep -F "@reboot pkill -kill -u $USER && ${CRON_DASHBOARD}") || (crontab -l; echo "@reboot pkill -kill -u $USER && ${CRON_DASHBOARD}") | crontab -
     (crontab -l | grep -F "* * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") || (crontab -l; echo "*/12 * * * * pgrep -x \"dashboard\" > /dev/null || ${CRON_DASHBOARD}") | crontab - 
